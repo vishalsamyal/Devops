@@ -1,0 +1,19 @@
+- name: Install the MySQL repo.
+   yum:
+     name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+     state: present
+   when: ansible_os_family == "RedHat"
+
+– name: Install MySQL Server
+yum: name=mysql-server state=present
+
+– name: Start MySQL Server and enable it
+service: name=mysqld state=started enabled=yes
+
+– name: Change root password
+mysql_user: name=root host={{item}} password={{root_db_password}}
+with_items:
+– “{{ansible_hostname}}”
+– 127.0.0.1
+– ::1
+– localhost
